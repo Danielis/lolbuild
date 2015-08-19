@@ -1,0 +1,41 @@
+{
+  "name": "lolbuild",
+  "version": "1.0.0",
+  "description": "Up to date builds for your favorite champions.",
+  "main": "index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "angular" : "latest",
+    "bootstrap": "latest"
+
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danielis/lolbuild.git"
+  },
+  "keywords": [
+    "league",
+    "of",
+    "legends",
+    "builds",
+    "ezreal",
+    "zed",
+    "league",
+    "learn"
+  ],
+  "author": {
+      "name" : "Daniel Silva"
+  },
+  "license": [
+    { "type": "MIT"
+    , "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/Danielis/lolbuild/issues"
+  },
+  "homepage": "https://github.com/Danielis/lolbuild#readme"
+}

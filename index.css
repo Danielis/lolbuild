@@ -1,0 +1,36 @@
+html, body{
+    background-color: black;
+    color:white;
+}
+h1,h2, h4,.loadingText{
+    color: #ff9c00;
+}
+
+.sideBar{
+    background-color: #202020;
+    position:fixed;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.sideBar input{
+    margin-bottom: 15px;
+}
+
+.contentView{
+    background-color: black;
+}
+
+.searchForm {
+    height: 25px;
+}
+
+.activeChamp {
+    background-color: #707070;
+}
+
+.championSelect:hover{
+    width: 150% !important;
+    margin-left: -25% !important;
+}
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html data-ng-app="lolbuild">
+<head>
+    <title>LOL Build</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" data-ng-controller="lolbuildController">
+            <div class="col-xs-1 sideBar">
+                <h4>Champ Select</h4>
+                <input type="search" class="form-control input-sm" placeholder="Search" class="searchForm" data-ng-model="champSearch" class="searchChampInput">                    
+                <div data-ng-repeat="champ in champKeys" ng-class="champ==curChamp.key ? 'activeChamp' : ''" class="championSelect">
+                    <img data-ng-click="updateCurChamp(champ)" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/champion/{{champions[champ].image.full}}" alt="{{champions[champ].name}}" class="img-responsive img-circle"> 
+                </div>
+                
+            </div>
+            <div class="col-xs-11 col-xs-offset-1 contentView">
+                <div class="col-xs-7">
+                    <img src="http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{{curChamp.key}}_0.jpg" alt="{{curChamp.name}}" class="img-responsive img-circle">  
+                </div>
+                <div class="col-xs-4">
+                    <h1>{{curChamp.name}}</h1>
+                    <span>Attack: </span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{curChamp.info.attack}}" aria-valuemin="0" aria-valuemax="10" style="width: {{curChamp.info.attack*10}}%">
+                            {{curChamp.info.attack}}
+                        </div>
+                    </div>
+                    <span>Magic: </span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{curChamp.info.magic}}" aria-valuemin="0" aria-valuemax="10" style="width: {{curChamp.info.magic*10}}%">
+                            {{curChamp.info.magic}}
+                        </div>
+                    </div>
+                    <span>Defense: </span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{curChamp.info.defense}}" aria-valuemin="0" aria-valuemax="10" style="width: {{curChamp.info.defense*10}}%">
+                            {{curChamp.info.defense}}
+                        </div>
+                    </div>
+                    <span>Difficulty: </span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{curChamp.info.difficulty}}" aria-valuemin="0" aria-valuemax="10" style="width: {{curChamp.info.difficulty*10}}%">
+                            {{curChamp.info.difficulty}}
+                    </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <h2>Current Builds: </h2>
+                </div>
+                <div class="col-xs-12" data-ng-if="!loading">
+                    
+                </div>
+                <div class="col-xs-12" data-ng-if="loading">
+                    <div class="col-xs-2">
+                        <img src="loadingCircle.gif" class="img-responsive img-rounded">
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
