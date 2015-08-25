@@ -8,15 +8,31 @@
 <body>
     <div class="container-fluid">
         <div class="row" data-ng-controller="lolbuildController">
-            <div class="col-xs-2 col-sm-1 sideBar">
-                <h4>Champ Select</h4>
-                <input type="search" class="form-control input-sm" placeholder="Search" class="searchForm" data-ng-model="champSearch" class="searchChampInput">                    
-                <div data-ng-repeat="champ in champKeys" ng-class="champ==curChamp.key ? 'activeChamp' : ''" class="championSelect">
-                    <img data-ng-click="updateCurChamp(champ)" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/champion/{{champions[champ].image.full}}" alt="{{champions[champ].name}}" class="img-responsive img-circle"> 
-                </div>
-                
+            <div class="col-xs-12 navBar">
+                <h1 class="text-center navTitle"> League of Legends</h1>
             </div>
-            <div class="col-xs-10 col-sm-11 col-xs-offset-2 col-sm-offset-1 contentView">
+            <div class="col-xs-2 col-sm-1 sideBar">
+                <div class="col-xs-12">
+                    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                </div>
+                <div class="col-xs-12">
+                    <p class="text-center goldText scrollText">scroll</p>
+                </div>
+                <div class="col-xs-12 col-sm-12 sideBarImgDiv">
+                    <!-- <h4>Champ Select</h4>
+                    <input type="search" class="form-control input-sm" placeholder="Search" class="searchForm" data-ng-model="champSearch" class="searchChampInput">       -->              
+                    <div data-ng-repeat="champ in champKeys" ng-class="champ==curChamp.key ? 'activeChamp' : ''" class="championSelect">
+                        <img data-ng-click="updateCurChamp(champ)" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/champion/{{champions[champ].image.full}}" alt="{{champions[champ].name}}" class="img-responsive img-rounded sideBarImg"> 
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <p class="text-center goldText scrollText">scroll</p>
+                </div>
+                <div class="col-xs-12">
+                    <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                </div>
+            </div>
+            <div class="col-xs-10 col-sm-11 contentView">
                 <div class="col-xs-12 col-sm-7">
                     <img src="http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{{curChamp.key}}_0.jpg" alt="{{curChamp.name}}" class="img-responsive img-circle">  
                 </div>
@@ -47,33 +63,35 @@
                     </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-xs-10 col-sm-11 buildView">
                 <div class="col-xs-12">
-                    <h2>Current Builds: </h2>
+                    <h3>Current Builds: </h3>
                 </div>
                 <div class="col-xs-12" data-ng-if="!loading">
                     <!-- http://ddragon.leagueoflegends.com/cdn/5.2.1/img/item/ -->
                     <!-- http://ddragon.leagueoflegends.com/cdn/5.2.1/img/spell/SummonerFlash.png  -->
-                    <div class="col-xs-12">
+                    <!-- <div class="col-xs-12">
                         <h4 class="col-xs-4">League</h4>
-                        <h4 class="col-xs-4">Items</h4 >
-                        <h4 class="col-xs-4">Spells</h4 >
-                    </div>    
+                        <h4 class="col-xs-4">Items & Spells</h4 >
+                    </div>     -->
                         
                     <div class="col-xs-12">
-                        <img src="challenger.png" class="col-xs-4 col-sm-2 img-responsive img-rounded">
+                        <div class="col-xs-4 col-sm-2">
+                            <img src="challenger.png" class="col-xs-10 col-xs-offset-1 img-responsive img-rounded">
+                            <p class="text-center goldText">Challenger</p>
+                        </div>
                         <img ng-repeat="item in items['CHALLENGER']" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/item/{{item}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                         <img ng-repeat="spell in spells['CHALLENGER']" src="spell{{spell}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                     </div>
                     <div class="col-xs-12">
-                        <img src="master.png" class="col-xs-4 col-sm-2 img-responsive img-rounded">
+                        <div class="col-xs-4 col-sm-2">
+                            <img src="challenger.png" class="col-xs-10 col-xs-offset-1 img-responsive img-rounded">
+                            <p class="text-center goldText">Master</p>
+                        </div>
                         <img ng-repeat="item in items['MASTER']" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/item/{{item}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                         <img ng-repeat="spell in spells['MASTER']" src="spell{{spell}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                     </div>
-                    <!-- <div class="col-xs-12">
-                        <img src="diamond.png" class="col-xs-4 col-sm-2 img-responsive img-rounded">
-                        <img ng-repeat="item in items['DIAMOND']" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/item/{{item}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
-                        <img ng-repeat="spell in spells['DIAMOND']" src="spell{{spell}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
-                    </div> -->
                     
                 </div>
                 <div class="col-xs-12" data-ng-if="loading">

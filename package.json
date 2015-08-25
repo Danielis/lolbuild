@@ -6,7 +6,8 @@
   "dependencies": {},
   "devDependencies": {
     "angular" : "latest",
-    "bootstrap": "latest"
+    "bootstrap": "latest",
+    "jquery":"latest"
 
   },
   "scripts": {

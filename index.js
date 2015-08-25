@@ -9,8 +9,22 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
     $scope.stillLoadingChamp = false;
     $scope.items = [];
     $scope.spells = [];
+    $scope.tiers = [
+        'CHALLENGER',
+        'MASTER',
+        'DIAMOND',
+        'PLATINUM',
+        'GOLD',
+        'SILVER',
+        'BRONZE'
+    ];
     $scope.challengerPlayers;
     $scope.masterPlayers;
+    $scope.diamondPlayers;
+    $scope.platinumPlayers;
+    $scope.goldPlayers;
+    $scope.silverPlayers;
+    $scope.bronzePlayers;
 
     riotAPI.getAPI().then(function(response){
         apiKey = response.data.key;
@@ -23,16 +37,21 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
             $scope.champKeys.sort();
             riotAPI.getItems(apiKey).then(function(itemData){
                 $scope.itemData = itemData.data.data;
-                $scope.loading = false;
                 riotAPI.getPlayers(apiKey, 'challenger').then(function(resp){
                     $scope.challengerPlayers = resp.data.entries;
-                    $scope.curChamp = $scope.champions[$scope.champKeys[24]];
+                    riotAPI.getPlayers(apiKey, 'master').then(function(res){
+                        $scope.masterPlayers = res.data.entries;
+                        $scope.loading = false;
+                        $scope.curChamp = $scope.champions[$scope.champKeys[24]];
+                    });
                 });
             });
         });
 
         $scope.updateCurChamp = function(ch){
-            $scope.curChamp = $scope.champions[ch];
+            if(!$scope.loading){
+                $scope.curChamp = $scope.champions[ch];
+            }
         }
     });
 
@@ -42,15 +61,9 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
             $scope.loading = true;
             $scope.items = [];
             $scope.spells = [];
-            riotAPI.getPlayers(apiKey, 'challenger').then(function(response){
-                $scope.getItemsPerTier(apiKey,response.data.tier,response.data.entries);
-            });
-            riotAPI.getPlayers(apiKey, 'master').then(function(response){
-                $scope.getItemsPerTier(apiKey,response.data.tier,response.data.entries);
-            });
-            // riotAPI.getPlayers(apiKey, 'diamond').then(function(response){
-            //     $scope.getItemsPerTier(apiKey,response.data.tier,response.data.entries);
-            // });
+            
+            $scope.getItemsPerTier(apiKey,$scope.tiers[0],$scope.challengerPlayers);
+            $scope.getItemsPerTier(apiKey,$scope.tiers[1],$scope.masterPlayers);
         }   
     });
 
@@ -65,10 +78,7 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                 var _finalSpells = [];
                 $interval(function() {
                     riotAPI.getMatchHistory(apiKey,entries[count++].playerOrTeamId,$scope.curChamp.id).then(function(resp){
-                        var matchCount = 0;
                         for( match in resp.data.matches){
-                            matchCount++;
-                            if(matchCount == 5){break;} // Don't need too many matches
                             var part = resp.data.matches[match].participants[0];
                             // Check items and build a list of them with counts
                             if(_items[part.stats.item0] === undefined){
@@ -118,7 +128,7 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                                 _spells[part.spell2Id]++;
                             }
                         }
-                        if(count == 10){ 
+                        if(count == 5){ 
                             var i = 0;
                             var attempts = 0;
                             while ( i < 6) {
@@ -136,8 +146,7 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                                 // Add and make sure they aren't chosen again  
                                 // Also don't include multiple boots or trinkets
                                 var itemToCheck = $scope.itemData[curHighestItem];
-                                
-                                if(itemToCheck){
+                                if(itemToCheck != undefined && itemToCheck.tags != undefined){
                                     var bootCheck = itemToCheck.tags.indexOf('Boots');
                                     var trinketCheck = itemToCheck.tags.indexOf('Trinket');
                                     if((bootCheck > -1 && !haveBoots) || (trinketCheck > -1 && !haveTrinket)){
@@ -160,7 +169,10 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                                     break;
                                 }
                             }
-                            for(var i=0; i < 2; ++i){
+                            var j =0;
+                            var attempts2 = 0;
+                            console.log(_spells);
+                            while( j < 2){
                                 var curHighestSpellV = 0;
                                 var curHighestSpell;
                                 for(spell in _spells){
@@ -170,8 +182,15 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                                     }
                                 }
                                 // Add and make sure not chosen again
-                                _finalSpells.push(curHighestSpell);
+                                if(curHighestSpell != undefined){
+                                    _finalSpells.push(curHighestSpell);
+                                    ++j;
+                                }
                                 _spells[curHighestSpell] = -curHighestSpellV;
+                                attempts2++;
+                                if(attempts2 >= 25){
+                                    break;
+                                }
                             }
                             _finalItems.sort();
                             $scope.items[tier] = _finalItems;
@@ -180,7 +199,7 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                             $scope.loading = false;
                         }
                     });
-                }, 2000, 10);
+                }, 2000, 5);
     }
 });
 
@@ -210,7 +229,7 @@ app.factory('riotAPI', function($http){
     function getMatchHistory(api, summoner, champ){
         return $http({
             method: "GET",
-            url: 'https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/'+ summoner + '?championIds='+ champ +'&rankedQueues=RANKED_SOLO_5x5&api_key='+api,
+            url: 'https://na.api.pvp.net/api/lol/na/v2.2/matchhistory/'+ summoner + '?endIndex=2&championIds='+ champ +'&rankedQueues=RANKED_SOLO_5x5&api_key='+api,
             data:{}
         });
     }
