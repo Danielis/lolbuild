@@ -1,6 +1,6 @@
 # lolbuild
 #### Learn What Top Challenger and Master players are Currently Building on your Champ!
-
+![Teemo by Reislet DeviantArt](http://orig00.deviantart.net/9d6d/f/2013/175/1/6/pixel_teemo_by_reislet-d6afmrq.gif)
 ## How to get started:
  * git clone this repo
  * Install Node.js
