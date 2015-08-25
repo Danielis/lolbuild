@@ -25,6 +25,7 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
     $scope.goldPlayers;
     $scope.silverPlayers;
     $scope.bronzePlayers;
+    var numberOfSummonersToAnalyze = 5;
 
     riotAPI.getAPI().then(function(response){
         apiKey = response.data.key;
@@ -78,128 +79,132 @@ app.controller('lolbuildController', function($scope, $interval,riotAPI){
                 var _finalSpells = [];
                 $interval(function() {
                     riotAPI.getMatchHistory(apiKey,entries[count++].playerOrTeamId,$scope.curChamp.id).then(function(resp){
-                        for( match in resp.data.matches){
-                            var part = resp.data.matches[match].participants[0];
-                            // Check items and build a list of them with counts
-                            if(_items[part.stats.item0] === undefined){
-                                _items[part.stats.item0] = 1;
-                            } else {
-                                _items[part.stats.item0]++;
+                        if(resp.status != 200){
+                            count++;
+                        } else {
+                            for( match in resp.data.matches){
+                                var part = resp.data.matches[match].participants[0];
+                                // Check items and build a list of them with counts
+                                if(_items[part.stats.item0] === undefined){
+                                    _items[part.stats.item0] = 1;
+                                } else {
+                                    _items[part.stats.item0]++;
+                                }
+                                if(_items[part.stats.item1] === undefined){
+                                    _items[part.stats.item1] = 1;
+                                } else {
+                                    _items[part.stats.item1]++;
+                                }
+                                if(_items[part.stats.item2] === undefined){
+                                    _items[part.stats.item2] = 1;
+                                } else {
+                                    _items[part.stats.item2]++;
+                                }
+                                if(_items[part.stats.item3] === undefined){
+                                    _items[part.stats.item3] = 1;
+                                } else {
+                                    _items[part.stats.item3]++;
+                                }
+                                if(_items[part.stats.item4] === undefined){
+                                    _items[part.stats.item4] = 1;
+                                } else {
+                                    _items[part.stats.item4]++;
+                                }
+                                if(_items[part.stats.item5] === undefined){
+                                    _items[part.stats.item5] = 1;
+                                } else {
+                                    _items[part.stats.item5]++;
+                                }
+                                if(_items[part.stats.item6] === undefined){
+                                    _items[part.stats.item6] = 1;
+                                } else {
+                                    _items[part.stats.item6]++;
+                                }
+                                // Do the same for spells
+                                if(_spells[part.spell1Id] === undefined){
+                                    _spells[part.spell1Id] = 1;
+                                } else {
+                                    _spells[part.spell1Id]++;
+                                }
+                                if(_spells[part.spell2Id] === undefined){
+                                    _spells[part.spell2Id] = 1;
+                                } else {
+                                    _spells[part.spell2Id]++;
+                                }
                             }
-                            if(_items[part.stats.item1] === undefined){
-                                _items[part.stats.item1] = 1;
-                            } else {
-                                _items[part.stats.item1]++;
-                            }
-                            if(_items[part.stats.item2] === undefined){
-                                _items[part.stats.item2] = 1;
-                            } else {
-                                _items[part.stats.item2]++;
-                            }
-                            if(_items[part.stats.item3] === undefined){
-                                _items[part.stats.item3] = 1;
-                            } else {
-                                _items[part.stats.item3]++;
-                            }
-                            if(_items[part.stats.item4] === undefined){
-                                _items[part.stats.item4] = 1;
-                            } else {
-                                _items[part.stats.item4]++;
-                            }
-                            if(_items[part.stats.item5] === undefined){
-                                _items[part.stats.item5] = 1;
-                            } else {
-                                _items[part.stats.item5]++;
-                            }
-                            if(_items[part.stats.item6] === undefined){
-                                _items[part.stats.item6] = 1;
-                            } else {
-                                _items[part.stats.item6]++;
-                            }
-                            // Do the same for spells
-                            if(_spells[part.spell1Id] === undefined){
-                                _spells[part.spell1Id] = 1;
-                            } else {
-                                _spells[part.spell1Id]++;
-                            }
-                            if(_spells[part.spell2Id] === undefined){
-                                _spells[part.spell2Id] = 1;
-                            } else {
-                                _spells[part.spell2Id]++;
-                            }
-                        }
-                        if(count == 5){ 
-                            var i = 0;
-                            var attempts = 0;
-                            while ( i < 6) {
-                                var curHighestItemV = 0;
-                                var curHighestItem;
-                                for(item in _items){
-                                    if(item != 0){
-                                        if(_items[item] > curHighestItemV){
-                                            curHighestItemV = _items[item];
-                                            curHighestItem = item;
+                            if(count == numberOfSummonersToAnalyze){ 
+                                var i = 0;
+                                var attempts = 0;
+                                while ( i < 6) {
+                                    var curHighestItemV = 0;
+                                    var curHighestItem;
+                                    for(item in _items){
+                                        if(item != 0){
+                                            if(_items[item] > curHighestItemV){
+                                                curHighestItemV = _items[item];
+                                                curHighestItem = item;
+                                            }
                                         }
                                     }
-                                }
 
-                                // Add and make sure they aren't chosen again  
-                                // Also don't include multiple boots or trinkets
-                                var itemToCheck = $scope.itemData[curHighestItem];
-                                if(itemToCheck != undefined && itemToCheck.tags != undefined){
-                                    var bootCheck = itemToCheck.tags.indexOf('Boots');
-                                    var trinketCheck = itemToCheck.tags.indexOf('Trinket');
-                                    if((bootCheck > -1 && !haveBoots) || (trinketCheck > -1 && !haveTrinket)){
-                                        _finalItems.push(curHighestItem);
-                                        if(bootCheck > -1){
-                                            haveBoots = true;
-                                        } else {
-                                            haveTrinket = true;
-                                        }
+                                    // Add and make sure they aren't chosen again  
+                                    // Also don't include multiple boots or trinkets
+                                    var itemToCheck = $scope.itemData[curHighestItem];
+                                    if(itemToCheck != undefined && itemToCheck.tags != undefined){
+                                        var bootCheck = itemToCheck.tags.indexOf('Boots');
+                                        var trinketCheck = itemToCheck.tags.indexOf('Trinket');
+                                        if((bootCheck > -1 && !haveBoots) || (trinketCheck > -1 && !haveTrinket)){
+                                            _finalItems.push(curHighestItem);
+                                            if(bootCheck > -1){
+                                                haveBoots = true;
+                                            } else {
+                                                haveTrinket = true;
+                                            }
 
-                                        ++i;
-                                    } else if(bootCheck == -1 && trinketCheck == -1){
-                                        _finalItems.push(curHighestItem);
-                                        ++i;
-                                    }                                    
-                                } 
-                                _items[curHighestItem] = -curHighestItemV;
-                                attempts++;
-                                if(attempts >= 25){
-                                    break;
-                                }
-                            }
-                            var j =0;
-                            var attempts2 = 0;
-                            console.log(_spells);
-                            while( j < 2){
-                                var curHighestSpellV = 0;
-                                var curHighestSpell;
-                                for(spell in _spells){
-                                    if(_spells[spell] > curHighestSpellV){
-                                        curHighestSpellV = _spells[spell];
-                                        curHighestSpell = spell;
+                                            ++i;
+                                        } else if(bootCheck == -1 && trinketCheck == -1){
+                                            _finalItems.push(curHighestItem);
+                                            ++i;
+                                        }                                    
+                                    } 
+                                    _items[curHighestItem] = -curHighestItemV;
+                                    attempts++;
+                                    if(attempts >= 50){
+                                        break;
                                     }
                                 }
-                                // Add and make sure not chosen again
-                                if(curHighestSpell != undefined){
-                                    _finalSpells.push(curHighestSpell);
-                                    ++j;
+                                var j =0;
+                                var attempts2 = 0;
+                                
+                                while( j < 2){
+                                    var curHighestSpellV = 0;
+                                    var curHighestSpell;
+                                    for(spell in _spells){
+                                        if(_spells[spell] > curHighestSpellV){
+                                            curHighestSpellV = _spells[spell];
+                                            curHighestSpell = spell;
+                                        }
+                                    }
+                                    // Add and make sure not chosen again
+                                    if(curHighestSpell != undefined){
+                                        _finalSpells.push(curHighestSpell);
+                                        ++j;
+                                    }
+                                    _spells[curHighestSpell] = -curHighestSpellV;
+                                    attempts2++;
+                                    if(attempts2 >= 50){
+                                        break;
+                                    }
                                 }
-                                _spells[curHighestSpell] = -curHighestSpellV;
-                                attempts2++;
-                                if(attempts2 >= 25){
-                                    break;
-                                }
+                                _finalItems.sort();
+                                $scope.items[tier] = _finalItems;
+                                _finalSpells.sort();
+                                $scope.spells[tier] = _finalSpells;
+                                $scope.loading = false;
                             }
-                            _finalItems.sort();
-                            $scope.items[tier] = _finalItems;
-                            _finalSpells.sort();
-                            $scope.spells[tier] = _finalSpells;
-                            $scope.loading = false;
                         }
                     });
-                }, 2000, 5);
+                }, 2500, numberOfSummonersToAnalyze);
     }
 });
 

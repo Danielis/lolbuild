@@ -83,6 +83,7 @@
                         </div>
                         <img ng-repeat="item in items['CHALLENGER']" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/item/{{item}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                         <img ng-repeat="spell in spells['CHALLENGER']" src="spell{{spell}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
+                        <span data-ng-if="items['CHALLENGER'].length == 0" class="text-center missingText"> Sorry no current build for this tier.</span>
                     </div>
                     <div class="col-xs-12">
                         <div class="col-xs-4 col-sm-2">
@@ -91,6 +92,7 @@
                         </div>
                         <img ng-repeat="item in items['MASTER']" src="http://ddragon.leagueoflegends.com/cdn/5.15.1/img/item/{{item}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
                         <img ng-repeat="spell in spells['MASTER']" src="spell{{spell}}.png" class="col-xs-2 col-sm-1 img-responsive img-rounded">
+                        <span data-ng-if="items['MASTER'].length == 0" class="text-center missingText"> Sorry no current build for this tier.</span>
                     </div>
                     
                 </div>
