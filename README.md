@@ -17,7 +17,7 @@
  * On Mac: run php -S localhost:3000
  * Open up a web browser and go to localhost:3000
  * You should see the app
- * You could also go to: lolbuilds.elasticbeanstalk.com 
+ * You could also go to: http://lolbuild.s3-website-us-west-2.amazonaws.com/
 
 ## Why
  Building this app was fun. I've always wanted to know what top people are playing on my favorite champs and how their items look at the end of their games. This is a small insight into how they play differently than I do.
